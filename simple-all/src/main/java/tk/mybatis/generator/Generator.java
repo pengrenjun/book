@@ -10,7 +10,7 @@ import org.mybatis.generator.config.xml.ConfigurationParser;
 import org.mybatis.generator.internal.DefaultShellCallback;
 
 /**
- * 读取 MBG 配置生成代码
+ * 读取 MBG 配置生成代码 qwe
  */
 public class Generator {
 

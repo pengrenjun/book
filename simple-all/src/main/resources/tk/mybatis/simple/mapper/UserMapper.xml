@@ -59,7 +59,8 @@
 	<select id="selectById" resultMap="userMap">
 		select * from sys_user where id = #{id}
 	</select>
-	
+
+	<!--通过别名可以直接使用resultType指定实体bean 多个对象需要使用集合或者数组进行接值-->
 	<select id="selectAll" resultType="tk.mybatis.simple.model.SysUser">
 	    select id, 
 	    	user_name userName, 
@@ -70,7 +71,7 @@
 	        create_time createTime
 	    from sys_user
 	</select>
-	
+
 	<select id="selectRolesByUserId" resultType="tk.mybatis.simple.model.SysRole">
 	    select 
 			r.id, 

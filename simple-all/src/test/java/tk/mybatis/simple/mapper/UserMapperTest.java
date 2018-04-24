@@ -52,7 +52,7 @@ public class UserMapperTest extends BaseMapperTest {
 			sqlSession.close();
 		}
 	}
-	
+	/*查询的结果包含用户的角色信息及用户信息*/
 	@Test
 	public void testSelectRolesByUserId(){
 		SqlSession sqlSession = getSqlSession();

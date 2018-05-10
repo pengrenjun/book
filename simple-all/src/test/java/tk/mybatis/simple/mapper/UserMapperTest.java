@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
+import netscape.javascript.JSObject;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
 import org.junit.Test;
@@ -73,14 +75,15 @@ public class UserMapperTest extends BaseMapperTest {
 			sqlSession.close();
 		}
 	}
-	
+
+	//根据用户id和角色有效性查询用户的所有角色信息
 	@Test
 	public void testSelectRolesByUserIdAndRoleEnabled(){
 		SqlSession sqlSession = getSqlSession();
 		try {
 			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 			//调用 selectRolesByUserIdAndRoleEnabled 方法查询用户的角色
-			List<SysRole> roleList = userMapper.selectRolesByUserIdAndRoleEnabled(1L, null);
+			List<SysRole> roleList = userMapper.selectRolesByUserIdAndRoleEnabled(1L, 1);
 			//结果不为空
 			Assert.assertNotNull(roleList);
 			//角色数量大于 0 个
@@ -90,7 +93,7 @@ public class UserMapperTest extends BaseMapperTest {
 			sqlSession.close();
 		}
 	}
-	
+	//根据用户bean和角色bean查询用户的所有角色信息
 	@Test
 	public void testSelectRolesByUserAndRole(){
 		SqlSession sqlSession = getSqlSession();
@@ -145,6 +148,7 @@ public class UserMapperTest extends BaseMapperTest {
 	}
 	
 	@Test
+	// 使用 JDBC 方式返回主键自增的值  仅支持主键自增的数据库
 	public void testInsert2(){
 		SqlSession sqlSession = getSqlSession();
 		try {
@@ -170,7 +174,36 @@ public class UserMapperTest extends BaseMapperTest {
 			sqlSession.close();
 		}
 	}
-	
+
+	@Test
+	// 使用 selectKey标签 返回主键的值 支持主键自增和通过序列生成(oracle)
+	public void testInsertByselectKey(){
+		SqlSession sqlSession = getSqlSession();
+		try {
+			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+			//创建一个 user 对象
+			SysUser user = new SysUser();
+			user.setUserName("xiaohong");
+			user.setUserPassword("123456798");
+			user.setUserEmail("xiaohong@mybatis.tk");
+			user.setUserInfo("testInsertByselectKey");
+			user.setHeadImg(new byte[]{1,2,3});
+			user.setCreateTime(new Date());
+			int result = userMapper.insert3(user);
+			//只插入 1 条数据
+			Assert.assertEquals(1, result);
+			//因为 id 回写，所以 id 不为 null
+			logger.debug("插入用户的返回id:"+user.getId());
+
+
+		} finally {
+			sqlSession.commit();
+			//不要忘记关闭 sqlSession
+			sqlSession.close();
+		}
+	}
+
+	//INSERT 动态插入列中使用 if
 	@Test
 	public void testInsert2Selective(){
 		SqlSession sqlSession = getSqlSession();
@@ -201,26 +234,25 @@ public class UserMapperTest extends BaseMapperTest {
 		try {
 			UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 			//从数据库查询 1 个 user 对象
-			SysUser user = userMapper.selectById(1L);
-			//当前 userName 为 admin
-			Assert.assertEquals("admin", user.getUserName());
+			SysUser user = userMapper.selectById(1017L);
 			//修改用户名
-			user.setUserName("admin_test");
+			user.setUserName("update_test");
 			//修改邮箱
-			user.setUserEmail("test@mybatis.tk");
+			user.setUserEmail("update_test@mybatis.tk");
 			//更新数据，特别注意，这里的返回值 result 是执行的 SQL 影响的行数
 			int result = userMapper.updateById(user);
 			//只更新 1 条数据
 			Assert.assertEquals(1, result);
 			//根据当前 id 查询修改后的数据
-			user = userMapper.selectById(1L);
-			//修改后的名字 admin_test
-			Assert.assertEquals("admin_test", user.getUserName());
+			user = userMapper.selectById(1017L);
+			//查看修改后的信息
+			logger.debug(JSONObject.toJSONString(user));
+
 		} finally {
 			//为了不影响数据库中的数据导致其他测试失败，这里选择回滚
 			//由于默认的 sqlSessionFactory.openSession() 是不自动提交的，
 			//因此不手动执行 commit 也不会提交到数据库
-			sqlSession.rollback();
+			sqlSession.commit();
 			//不要忘记关闭 sqlSession
 			sqlSession.close();
 		}
@@ -258,7 +290,7 @@ public class UserMapperTest extends BaseMapperTest {
 			sqlSession.close();
 		}
 	}
-	
+	//根据动态条件查询用户信息
 	@Test
 	public void testSelectByUser(){
 		SqlSession sqlSession = getSqlSession();
@@ -286,7 +318,8 @@ public class UserMapperTest extends BaseMapperTest {
 			sqlSession.close();
 		}
 	}
-	
+
+	//choose用法:通过用户id或者用户名查找用户信息
 	@Test
 	public void testSelectByIdOrUserName(){
 		SqlSession sqlSession = getSqlSession();
@@ -311,7 +344,7 @@ public class UserMapperTest extends BaseMapperTest {
 			sqlSession.close();
 		}
 	}
-	
+	//根据动态条件更新用户信息
 	@Test
 	public void testUpdateByIdSelective(){
 		SqlSession sqlSession = getSqlSession();
@@ -339,7 +372,8 @@ public class UserMapperTest extends BaseMapperTest {
 			sqlSession.close();
 		}
 	}
-	
+
+	//根据用户 id 集合查询
 	@Test
 	public void testSelectByIdList(){
 		SqlSession sqlSession = getSqlSession();
@@ -357,6 +391,10 @@ public class UserMapperTest extends BaseMapperTest {
 		}
 	}
 
+	//foreach 实现批量插入 并返回自增的主键
+	/*这个功能首先要求数据库主键值为自增类型， 同时还要求该数据库提供 JDBC
+	动可以支持返回批量插入的主键值 JDBC 提供了接口 但并不是所有数据库都完美实现了该
+	接口），因此到目前为止 可以完美支持该功能的仅有 MySQL 数据库*/
 	@Test
 	public void testInsertList(){
 		SqlSession sqlSession = getSqlSession();
@@ -384,7 +422,7 @@ public class UserMapperTest extends BaseMapperTest {
 			sqlSession.close();
 		}
 	}
-	
+	// foreach 实现动态 UPDATE
 	@Test
 	public void testUpdateByMap(){
 		SqlSession sqlSession = getSqlSession();

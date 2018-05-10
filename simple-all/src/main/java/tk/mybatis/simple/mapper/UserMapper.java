@@ -41,8 +41,8 @@ public interface UserMapper {
 	 * @return
 	 */
 	List<SysRole> selectRolesByUserIdAndRoleEnabled(@Param("userId")Long userId, @Param("enabled")Integer enabled);
-	
 	/**
+
 	 * 根据用户 id 和 角色的 enabled 状态获取用户的角色
 	 * 
 	 * @param user
@@ -129,7 +129,7 @@ public interface UserMapper {
 	 * @param idList
 	 * @return
 	 */
-	List<SysUser> selectByIdList(List<Long> idList);
+	List<SysUser> selectByIdList(@Param("idList") List<Long> idList);
 	
 	/**
 	 * 批量插入用户信息
@@ -221,4 +221,6 @@ public interface UserMapper {
 	 * @return
 	 */
 	int deleteUserById(Long id);
+
+
 }

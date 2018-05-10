@@ -176,7 +176,7 @@
 			create_time = #{createTime, jdbcType=TIMESTAMP}
 		where id = #{id}
 	</update>
-	
+
 	<delete id="deleteById">
 		delete from sys_user where id = #{id}
 	</delete>
@@ -260,10 +260,18 @@
 	        head_img headImg,
 	        create_time createTime
 	    from sys_user
-    	where id in
-    	<foreach collection="list" open="(" close=")" separator="," item="id" index="i">
-    		#{id}
-    	</foreach>
+		<choose>
+			<when test="idList!= null and idList.size>0">
+				where id in
+				<foreach collection="idList" open="(" close=")" separator="," item="id" index="i">
+					#{id}
+				</foreach>
+			</when>
+			<otherwise>
+				limit 0
+			</otherwise>
+		</choose>
+
 	</select>
 	
 	<insert id="insertList" useGeneratedKeys="true" keyProperty="id">

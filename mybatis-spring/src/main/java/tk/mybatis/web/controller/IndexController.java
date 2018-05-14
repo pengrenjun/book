@@ -17,4 +17,15 @@ public class IndexController {
         mv.addObject("now", new Date());
         return mv;
     }
+
+
+    @RequestMapping(value = "intosystem")
+    public ModelAndView intosystem() {
+        ModelAndView mv = new ModelAndView();
+        try {
+            mv.setViewName("redirect:/dicts");
+        } catch (Exception e){
+        }
+        return mv;
+    }
 }

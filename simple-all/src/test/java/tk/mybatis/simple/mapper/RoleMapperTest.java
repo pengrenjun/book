@@ -44,8 +44,6 @@ public class RoleMapperTest extends BaseMapperTest {
 			SysRole role = roleMapper.selectById2(1l);
 			//role 不为空
 			Assert.assertNotNull(role);
-			//roleName = 管理员
-			Assert.assertEquals("管理员", role.getRoleName());
 		} finally {
 			//不要忘记关闭 sqlSession
 			sqlSession.close();

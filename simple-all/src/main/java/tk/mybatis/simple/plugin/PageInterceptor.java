@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Mybatis - 通用分页拦截器
+ * MybatisExc - 通用分页拦截器
  *
  * @author liuzh
  * @version 1.0.0

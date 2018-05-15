@@ -7,7 +7,6 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import java.io.IOException;
 import java.io.Reader;
-import org.junit.BeforeClass;
 
 /**
  * @Description sqlSession访问测试工具
@@ -19,7 +18,7 @@ public class SqlsessionUtil {
 
     private static SqlSessionFactory sqlSessionFactory;
 
-   private  static  Reader reader ;
+    private  static  Reader reader ;
 
     private static SqlSession sqlSession;
 
@@ -41,6 +40,11 @@ public class SqlsessionUtil {
     //获取mappper接口
     public static  <T> T getMapperByClass(Class<T> clazz)  throws IOException{
         return  (T) getSqlSession().getMapper(clazz);
+    }
+
+    //提交操作
+    public static void commit(){
+        sqlSession.commit();
     }
 
     public static   void closeSession(){

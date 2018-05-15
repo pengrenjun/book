@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 					"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="MybatisExc.mapper.CountryMapper">
-	<select id="selectByPrimaryKey" resultType="MybatisExc.entity.Country">
+	<select id="selectByPrimaryKey" resultType="Country">
 		select id,countryname,countrycode from country where id=#{id}
 	</select>
 </mapper>

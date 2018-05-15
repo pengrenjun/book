@@ -48,6 +48,19 @@ public class SysUser implements Serializable {
 	 */
 	private List<SysRole> roleList;
 
+	/**
+	 *用户详细信息
+	 */
+	private SysUserInfo sysUserInfo;
+
+	public SysUserInfo getSysUserInfo() {
+		return sysUserInfo;
+	}
+
+	public void setSysUserInfo(SysUserInfo sysUserInfo) {
+		this.sysUserInfo = sysUserInfo;
+	}
+
 	public Long getId() {
 		return id;
 	}

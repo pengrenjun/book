@@ -114,6 +114,16 @@ CREATE TABLE `sys_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1035 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
+--用户详细信息(与用户表一对一关系)
+CREATE TABLE `user_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `user_id` int(11) DEFAULT NULL COMMENT '用户id',
+  `location` varchar(255) DEFAULT NULL COMMENT '住址',
+  `phone` varchar(255) DEFAULT NULL COMMENT '联系方式',
+  `work` varchar(255) DEFAULT NULL COMMENT '工作',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户详细信息';
+
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------

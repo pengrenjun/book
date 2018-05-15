@@ -1,5 +1,6 @@
 package MybatisSqlTest;
 
+import MybatisExc.Util.SqlsessionUtil;
 import MybatisExc.entity.Country;
 import MybatisExc.mapper.CountryMapper;
 import org.apache.ibatis.io.Resources;
@@ -28,14 +29,13 @@ public class CountryMapperTest {
 	}
 	
 	@Test
-	public void testSelectAll(){
-		SqlSession sqlSession = sqlSessionFactory.openSession();
+	public void selectByPrimaryKey() throws IOException {
 		try {
-			CountryMapper countryMapper = sqlSession.getMapper(CountryMapper.class);
+			CountryMapper countryMapper = SqlsessionUtil.getMapperByClass(CountryMapper.class);
 			Country country = countryMapper.selectByPrimaryKey(1);
 			System.out.println(country.getCountryname());
 		} finally {
-			sqlSession.close();
+			SqlsessionUtil.closeSession();
 		}
 	}
 

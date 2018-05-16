@@ -1,8 +1,10 @@
 package MybatisExc.mapper;
 
 import MybatisExc.entity.SysUser;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserMapper {
 
@@ -37,29 +39,26 @@ public interface UserMapper {
      */
      Long insertNewSysUser(SysUser sysUser);
 
+    /**
+     * foreach 实现 in 集合
+     */
+    List<SysUser> getSysusersByIds(@Param("ids") Long[] ids);
+
+    /**
+     *foreach 实现批量插入
+     */
+    int insertSysUsersList(@Param("sysUserList") List<SysUser> sysUserList);
+
+    /**
+     * foreach 实现动态 UPDATE 参数类型为Map
+     */
+    int updateSysUserList(@Param("userMap") Map<String,Object> userMap,@Param("id") Long id);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     *通过用户一部分信息 用户名,密码,id(用户作为传参)查找用户主信息列表数据
+     */
+    SysUser getSysUserByUserCondition(SysUser sysUser);
 
 
 
@@ -67,6 +66,11 @@ public interface UserMapper {
      * 通过用户id查询用户的基本信息及其所具有的所用角色信息
      */
     SysUser getSysuserInfoAndRolelistInfo(Long id);
+
+    /**
+     * 通过用户id查询用户的基本信息及其所具有的所用角色信息,权限信息
+     */
+    SysUser getSysuserInfoAndRoleAndSysPrivilegelistInfo(Long id);
 
 
 }

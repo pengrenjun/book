@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class SysUser implements Serializable {
 	private static final long serialVersionUID = -328602757171077630L;
+
 	/**
 	 * 用户ID
 	 */
@@ -52,6 +53,13 @@ public class SysUser implements Serializable {
 	 *用户详细信息
 	 */
 	private SysUserInfo sysUserInfo;
+
+
+
+	/**
+	 *查询条件构造函数
+	 */
+
 
 	public SysUserInfo getSysUserInfo() {
 		return sysUserInfo;

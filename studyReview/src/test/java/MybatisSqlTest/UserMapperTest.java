@@ -8,8 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Description 用户信息sql测试类
@@ -89,7 +88,7 @@ public class UserMapperTest {
      */
     @Test
     public void insertNewSysUser(){
-        SysUser sysUser=new SysUser();
+        SysUser sysUser=null;
         sysUser.setUserName("xiaogang");
         sysUser.setCreateTime(new Date());
         sysUser.setUserEmail("adf@qq.com");
@@ -99,14 +98,103 @@ public class UserMapperTest {
         SqlsessionUtil.closeSession();
     }
 
+    /**
+     * foreach 实现 in 集合 实现用户查询
+     */
+    @Test
+    public void getSysusersByIds(){
+        Long[] ids=new Long[]{Long.valueOf(1), Long.valueOf(1006)};
+        List<SysUser> sysUserList=userMapper.getSysusersByIds(ids);
+        SqlsessionUtil.closeSession();
+    }
 
     /**
-     * 通过用户id查询用户的基本信息及其所具有的所用角色信息
-     * TODO 待测试
+     * foreach 实现批量插入
+     */
+    @Test
+    public void insertSysUsersList(){
+        SysUser sysUser1=new SysUser();
+        sysUser1.setUserName("xiaoxiao");
+        sysUser1.setUserPassword("1201234123");
+        sysUser1.setCreateTime(new Date());
+
+        SysUser sysUser2=new SysUser();
+        sysUser2.setUserName("xiaolzi");
+        sysUser2.setUserPassword("245245214352");
+        sysUser2.setCreateTime(new Date());
+
+        List<SysUser> sysUserList=new ArrayList<SysUser>();
+        sysUserList.add(sysUser1);
+        sysUserList.add(sysUser2);
+        int count=userMapper.insertSysUsersList(sysUserList);
+        SqlsessionUtil.closeSession();
+    }
+
+    /**
+     *  foreach 实现动态 UPDATE 参数类型为Map
+     */
+    @Test
+    public void updateSysUserList(){
+
+        Map<String,Object> userMap=new HashMap<String,Object>();
+        userMap.put("user_name","administrator");
+        userMap.put("user_password",23423413);
+        int a=userMapper.updateSysUserList(userMap, Long.valueOf(1));
+        SqlsessionUtil.closeSession();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     *通过用户一部分信息 用户名,密码,id(用户作为传参)查找用户主信息列表数据
+     */
+    @Test
+    public void getSysUserByUserCondition(){
+        SysUser sysUser=new SysUser();
+        sysUser.setId((long)1);
+        SysUser user=userMapper.getSysUserByUserCondition(sysUser);
+        userMapper.getSysUserByUserCondition(sysUser);
+        user.toString();
+        SqlsessionUtil.closeSession();
+    }
+
+
+    /**
+     * 通过用户id查询用户的基本信息及其所具有的所用角色信息(嵌套结果映射)
+     *
      */
     @Test
     public void getSysuserInfoAndRolelistInfo(){
         SysUser sysUser=userMapper.getSysuserInfoAndRolelistInfo((long) 1);
         SqlsessionUtil.closeSession();
     }
+
+    /**
+     * 通过用户id查询用户的基本信息及其所具有的所用角色信息,权限信息(嵌套结果映射)
+     */
+    @Test
+    public void getSysuserInfoAndRoleAndSysPrivilegelistInfo(){
+        SysUser sysUser=userMapper.getSysuserInfoAndRoleAndSysPrivilegelistInfo((long) 1);
+        SqlsessionUtil.closeSession();
+    }
+
+
 }

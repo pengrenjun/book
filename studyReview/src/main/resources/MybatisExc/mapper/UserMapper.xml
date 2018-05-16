@@ -33,13 +33,23 @@
                      select="MybatisExc.mapper.UserInfoMapper.getSysUserInfoById" column="{id=user_info_pkId}"/>
     </resultMap>
 
-    <resultMap id="UserAndRoleListMap" type="SysUser" extends="UserMap">
-        <collection property="roleList" javaType="MybatisExc.entity.SysRole">
-            <id property="id" column="id"/>
+   <!-- <resultMap id="UserAndRoleListMap" type="SysUser" extends="UserMap">
+        <collection property="roleList" ofType="MybatisExc.entity.SysRole">
+            <result property="id" column="id"/>
             <result property="roleName" column="role_name"/>
-           <!-- <result property="enabled" column="enabled"/>-->
+           &lt;!&ndash; <result property="enabled" column="enabled"/>&ndash;&gt;
             <result property="createBy" column="create_by"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        </collection>
+    </resultMap>-->
+
+    <resultMap id="UserAndRoleListMap" type="SysUser" extends="UserMap">
+        <collection property="roleList" resultMap="MybatisExc.mapper.RoleMapper.RoleMap">
+        </collection>
+    </resultMap>
+
+    <resultMap id="SysuserInfoAndRoleAndSysPrivilegeMap" type="SysUser" extends="UserMap">
+        <collection property="roleList" resultMap="MybatisExc.mapper.RoleMapper.RoleAndPriviligeMap">
         </collection>
     </resultMap>
 
@@ -53,7 +63,7 @@
 
     <select id="getSysuserInfoAndRolelistInfo" resultMap="UserAndRoleListMap">
         SELECT
-	     a.*,c.*
+	     a.*,c.id,c.role_name,c.create_by,c.create_time
         FROM
 	    sys_user a
         INNER JOIN sys_user_role b ON a.id = b.user_id
@@ -104,4 +114,74 @@
         SELECT LAST_INSERT_ID();
       </selectKey>
     </insert>
+
+
+    <select id="getSysUserByUserCondition" resultMap="UserCInfoMap">
+        SELECT
+        u.*,a.id user_info_pkId
+        from sys_user u
+        INNER JOIN
+        user_info a
+        ON
+        u.id=a.user_id
+        where 1=1
+        <if test="userName!=null and userName!=''">
+          and u.user_name LIKE concat('%', #{userName}, '%')
+        </if>
+
+        <if test="userPassword!=null and userPassword!=''">
+            and u.user_password LIKE concat('%', #{userPassword}, '%')
+        </if>
+
+        <if test="id!=null and id!=''">
+            and u.id LIKE concat('%', #{id}, '%')
+        </if>
+    </select>
+
+
+    <select id="getSysusersByIds" resultMap="UserCInfoMap">
+        SELECT
+        u.*,a.id user_info_pkId
+        from sys_user u
+        INNER JOIN
+        user_info a
+        ON
+        u.id=a.user_id
+        where u.id IN
+        <foreach collection="ids" open="("  close=")" separator="," item="id" index="i">
+            #{id}
+        </foreach>
+
+    </select>
+
+
+    <insert id="insertSysUsersList" >
+        INSERT INTO sys_user (user_name,user_password,user_email,user_info,head_img,create_time)
+        VALUES
+        <foreach collection="sysUserList" item="user" separator=",">
+            (
+            #{user.userName},#{user.userPassword},#{user.userEmail},#{user.userInfo},#{user.headImg,jdbcType=BLOB},#{user.createTime,jdbcType=DATE})
+        </foreach>
+    </insert>
+
+    <update id="updateSysUserList">
+        UPDATE sys_user t SET
+        <foreach collection="userMap" item="val" index="key" separator=",">
+           ${key}=#{val}
+        </foreach>
+        WHERE
+        t.id=#{id}
+    </update>
+
+    <select id="getSysuserInfoAndRoleAndSysPrivilegelistInfo" resultMap="SysuserInfoAndRoleAndSysPrivilegeMap">
+      SELECT
+        a.*,c.id roleId,c.role_name,c.create_by,c.create_time,e.id prgId,e.privilege_name,e.privilege_url
+      FROM
+	    sys_user a
+      INNER JOIN sys_user_role b ON a.id = b.user_id
+      INNER JOIN sys_role c on c.id=b.role_id
+      INNER JOIN sys_role_privilege d ON c.id = d.role_id
+      INNER JOIN sys_privilege e ON d.privilege_id = e.id
+      WHERE a.id=#{id}
+    </select>
 </mapper>

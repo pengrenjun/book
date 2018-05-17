@@ -157,3 +157,20 @@ CREATE TABLE `user info` (
 -- ----------------------------
 -- Records of user info
 -- ----------------------------
+
+--用户 角色 权限数据查询视图
+CREATE VIEW user_role_prg_v AS SELECT
+	a.*, c.id roleId,
+	c.role_name,
+	c.create_by,
+	c.create_time role_ceate_time,
+	c.enabled,
+	e.id prgId,
+	e.privilege_name,
+	e.privilege_url
+FROM
+	sys_user a
+INNER JOIN sys_user_role b ON a.id = b.user_id
+INNER JOIN sys_role c ON b.role_id = c.id
+INNER JOIN sys_role_privilege d ON c.id = d.role_id
+INNER JOIN sys_privilege e ON d.privilege_id = e.id;

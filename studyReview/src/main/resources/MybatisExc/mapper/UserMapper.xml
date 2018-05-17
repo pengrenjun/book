@@ -5,6 +5,8 @@
 <!--namespace作为全名配置-->
 <mapper namespace="MybatisExc.mapper.UserMapper">
 
+
+
     <resultMap id="UserMap" type="MybatisExc.entity.SysUser">
         <id property="id" column="id"/>
         <result property="userName" column="user_name"/>
@@ -61,7 +63,7 @@
         />
     </resultMap>
 
-    <select id="getSysUserById" resultMap="UserMap">
+    <select id="getSysUserById"  resultMap="UserMap">
        select t.* from sys_user t where t.id=#{id}
     </select>
 

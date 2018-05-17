@@ -4,6 +4,7 @@ import MybatisExc.Enum.Status;
 import MybatisExc.entity.SysRole;
 import MybatisExc.entity.SysUserInfo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * @CreateDate 2018-05-17 下午 2:06
  * @Version 1.0
  */
-public class UserRolePrgVo {
+public class UserRolePrgVo implements Serializable {
 
     /**
      * 用户ID

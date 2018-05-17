@@ -1,11 +1,19 @@
 package MybatisExc.mapper;
 
 import MybatisExc.entity.SysUser;
+import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.cache.decorators.FifoCache;
 
 import java.util.List;
 import java.util.Map;
 
+/*@CacheNamespace(
+        eviction= FifoCache.class,
+        flushInterval=60000,
+        size=1024,
+        readWrite=true
+)*/
 public interface UserMapper {
 
     /**

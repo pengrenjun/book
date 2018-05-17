@@ -3,6 +3,7 @@ package MybatisExc.sysvo;
 import MybatisExc.entity.CreateInfo;
 import MybatisExc.entity.SysUser;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @CreateDate 2018-05-17 下午 2:19
  * @Version 1.0
  */
-public class SysRoleVo {
+public class SysRoleVo implements Serializable {
     /**
      * 角色ID
      */

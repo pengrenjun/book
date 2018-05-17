@@ -16,6 +16,10 @@
         <!--延迟加载按需进行-->
         <setting name="aggressiveLazyLoading" value="false"/>
 
+        <!--开启二级缓存 默认为true-->
+        <setting name="cacheEnabled" value="true"/>
+        
+
     </settings>
 
 

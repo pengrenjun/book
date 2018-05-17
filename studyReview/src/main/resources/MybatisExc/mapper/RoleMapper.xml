@@ -3,6 +3,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="MybatisExc.mapper.RoleMapper">
 
+    <!--采用Ehcache缓存框架-->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+
     <resultMap id="RoleMap" type="MybatisExc.entity.SysRole">
         <id property="id" column="id"/>
         <result property="roleName" column="role_name"/>
@@ -42,6 +45,7 @@
          INNER JOIN sys_user_role  b ON a.id=b.role_id
          where b.user_id=#{userId}
     </select>
+
 
 
 </mapper>

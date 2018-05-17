@@ -1,12 +1,14 @@
 package MybatisExc.sysvo;
 
+import java.io.Serializable;
+
 /**
  * @Description 权限视图
  * @Author pengrj
  * @CreateDate 2018-05-17 下午 2:22
  * @Version 1.0
  */
-public class SysPrivilegeVo {
+public class SysPrivilegeVo implements Serializable {
 
     /**
      * 权限ID

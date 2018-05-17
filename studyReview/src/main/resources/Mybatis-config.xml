@@ -18,10 +18,18 @@
 
     </settings>
 
+
     <!--包的别名-->
     <typeAliases>
         <package name="MybatisExc.entity"/>
     </typeAliases>
+
+
+    <!--配置类型处理器 放在typeAliases标签后面进行配置-->
+    <typeHandlers>
+        <typeHandler handler="MybatisExc.Enum.EnumTypeHandler.StatusTypeHandler"
+                     javaType="MybatisExc.Enum.Status"/>
+    </typeHandlers>
 
     <!--配置数据库的连接-->
     <environments default="development">
@@ -38,8 +46,14 @@
         </environment>
     </environments>
 
+
+
     <!--SQL语句和映射配置文件-->
     <mappers>
         <package name="MybatisExc.mapper"/>
     </mappers>
+
+
+
+
 </configuration>

@@ -1,5 +1,6 @@
 package MybatisSqlTest;
 
+import MybatisExc.Enum.Status;
 import MybatisExc.Util.SqlsessionUtil;
 import MybatisExc.entity.SysPrivilege;
 import MybatisExc.entity.SysRole;
@@ -191,6 +192,24 @@ public class UserMapperTest {
             List<SysPrivilege> sysPrivilegeList=sysRole.getPrivilegeList();
         }
 
+
+        SqlsessionUtil.closeSession();
+    }
+
+    /**
+     * 测试单据状态枚举功能
+     */
+    @Test
+    public void testStatusEnum(){
+        SysUser sysUser=new SysUser();
+        sysUser.setUserName("xiaomingming");
+        sysUser.setUserPassword("2452452343546");
+        sysUser.setCreateTime(new Date());
+        sysUser.setUserInfo("test status");
+        sysUser.setStatus(Status.NEW);
+        Long id= userMapper.insertNewSysUser(sysUser);
+        SqlsessionUtil.commit();
+        SysUser sysUser1=userMapper.getSysUserById(id);
         SqlsessionUtil.closeSession();
     }
 

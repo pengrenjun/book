@@ -1,5 +1,7 @@
 package MybatisExc.entity;
 
+import MybatisExc.Enum.Status;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -55,6 +57,18 @@ public class SysUser implements Serializable {
 	private SysUserInfo sysUserInfo;
 
 
+	/**
+	 * 单据状态
+	 */
+	private Status status;
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
 
 	/**
 	 *查询条件构造函数

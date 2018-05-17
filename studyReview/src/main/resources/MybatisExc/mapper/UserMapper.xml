@@ -12,7 +12,8 @@
         <result property="userEmail" column="user_email"/>
         <result property="userInfo" column="user_info"/>
         <result property="headImg" column="head_img" jdbcType="BLOB"/>
-        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="createTime" column="create_time" jdbcType="DATE"/>
+        <result property="status" column="status"/>
     </resultMap>
 
     <resultMap id="UserInfoMap" type="SysUser" extends="UserMap">
@@ -112,11 +113,11 @@
     </select>
 
     <!--BLOB对应二进制数据流-->
+   <!-- Mysql数据库插入时不需指定id,Mysql会自动生成;但在Oracle数据库中要指定id 因为在执行selectKey之后就生成了id 这个id要插入到数据库中
+    返回自增主键 Mysql自增主键-->
     <insert id="insertNewSysUser">
-      /*Mysql数据库插入时不需指定id,Mysql会自动生成;但在Oracle数据库中要指定id 因为在执行selectKey之后就生成了id 这个id要插入到数据库中*/
-      INSERT  INTO  sys_user(user_name,user_password,user_email,user_info,head_img,create_time)
-      VALUE (#{userName},#{userPassword},#{userEmail},#{userInfo},#{headImg,jdbcType=BLOB},#{createTime,jdbcType=TIMESTAMP})
-      /*返回自增主键 Mysql自增主键*/
+      INSERT  INTO  sys_user(user_name,user_password,user_email,user_info,head_img,create_time,status)
+      VALUE (#{userName},#{userPassword},#{userEmail},#{userInfo},#{headImg,jdbcType=BLOB},#{createTime,jdbcType=TIMESTAMP},#{status})
       <selectKey keyProperty="id" keyColumn="id" resultType="long" order="AFTER">
         SELECT LAST_INSERT_ID();
       </selectKey>

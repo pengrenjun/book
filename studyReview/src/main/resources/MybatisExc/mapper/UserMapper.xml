@@ -53,6 +53,13 @@
         </collection>
     </resultMap>
 
+    <!--通过用户id查询用户的基本信息及其所具有的所用角色信息,权限信息(嵌套结果查询方式)-->
+    <resultMap id="SysuserInfoAndRoleAndSysPrivilegeMapB" type="SysUser" extends="UserMap">
+        <collection property="roleList" fetchType="lazy" column="{userId=id}"
+          select="MybatisExc.mapper.RoleMapper.getSysRoleListByUserId"
+        />
+    </resultMap>
+
     <select id="getSysUserById" resultMap="UserMap">
        select t.* from sys_user t where t.id=#{id}
     </select>
@@ -183,5 +190,10 @@
       INNER JOIN sys_role_privilege d ON c.id = d.role_id
       INNER JOIN sys_privilege e ON d.privilege_id = e.id
       WHERE a.id=#{id}
+    </select>
+
+    <select id="getSysuserRolePrgBySelect" resultMap="SysuserInfoAndRoleAndSysPrivilegeMapB">
+        SELECT a.* FROM  sys_user a
+        where a.id=#{id}
     </select>
 </mapper>

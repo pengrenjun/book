@@ -1,6 +1,8 @@
 package MybatisSqlTest;
 
 import MybatisExc.Util.SqlsessionUtil;
+import MybatisExc.entity.SysPrivilege;
+import MybatisExc.entity.SysRole;
 import MybatisExc.entity.SysUser;
 import MybatisExc.entity.SysUserInfo;
 import MybatisExc.mapper.UserMapper;
@@ -143,26 +145,6 @@ public class UserMapperTest {
         SqlsessionUtil.closeSession();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      *通过用户一部分信息 用户名,密码,id(用户作为传参)查找用户主信息列表数据
      */
@@ -193,6 +175,22 @@ public class UserMapperTest {
     @Test
     public void getSysuserInfoAndRoleAndSysPrivilegelistInfo(){
         SysUser sysUser=userMapper.getSysuserInfoAndRoleAndSysPrivilegelistInfo((long) 1);
+        SqlsessionUtil.closeSession();
+    }
+
+    /**
+     * 通过用户id查询用户的基本信息及其所具有的所用角色信息,权限信息(嵌套查询方式)
+     */
+    @Test
+    public void getSysuserRolePrgBySelect(){
+        SysUser sysUser=userMapper.getSysuserRolePrgBySelect((long)1);
+
+        //启动延迟加载
+        List<SysRole> sysRoleList=sysUser.getRoleList();
+        for(SysRole sysRole:sysRoleList){
+            List<SysPrivilege> sysPrivilegeList=sysRole.getPrivilegeList();
+        }
+
         SqlsessionUtil.closeSession();
     }
 

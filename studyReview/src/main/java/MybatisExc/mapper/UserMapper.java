@@ -68,9 +68,17 @@ public interface UserMapper {
     SysUser getSysuserInfoAndRolelistInfo(Long id);
 
     /**
-     * 通过用户id查询用户的基本信息及其所具有的所用角色信息,权限信息
+     * 通过用户id查询用户的基本信息及其所具有的所用角色信息,权限信息(嵌套结果映射方式)
      */
     SysUser getSysuserInfoAndRoleAndSysPrivilegelistInfo(Long id);
+
+    /**
+     * 通过用户id查询用户的基本信息及其所具有的所用角色信息,权限信息(嵌套结果查询方式)
+     */
+    SysUser getSysuserRolePrgBySelect(Long id);
+
+
+
 
 
 }

@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.Reader;
 
 /**
- * @Description sqlSession访问测试工具
+ * @Description sqlSession访问测试工具 从 XML 中构建 SqlSessionFactory
  * @Author pengrj
  * @CreateDate 2018-05-15 上午 11:23
  * @Version 1.0
